@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -19,12 +19,12 @@ import { Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItem
 
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import { AuthContext } from "../../context/AuthContext";
 
 export const Header = () => {
 
     const navigate = useNavigate()
     const pages = ['Products', 'Pricing', 'Blog'];
-    const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -94,7 +94,7 @@ export const Header = () => {
         </Box>
         );
     
-
+    const {token, setToken} = useContext(AuthContext)
     return <>
         <AppBar position="static">
             <Container maxWidth="xl">
@@ -206,12 +206,13 @@ export const Header = () => {
                                 {list(anchor)}
                             </Drawer>
                             </React.Fragment>
-                        ))}                        
-                        <Tooltip title="Open settings">
+                        ))}  
+                        {token ? <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                             </IconButton>
-                        </Tooltip>
+                        </Tooltip> : <></>}                   
+                        
                         <Menu
                             sx={{ mt: '45px' }}
                             id="menu-appbar"
@@ -228,11 +229,11 @@ export const Header = () => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                             >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                                <MenuItem key={"LogOut"} onClick={handleCloseUserMenu}>
+                                    <Button textAlign="center" component="button" onClick={() => {
+                                        setToken("")
+                                    }}>Log Out</Button>
                                 </MenuItem>
-                            ))}
                         </Menu>
 
                         <Button type="button" sx={{marginLeft: "20px",}} onClick={() => {
