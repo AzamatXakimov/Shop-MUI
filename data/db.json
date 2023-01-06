@@ -1,0 +1,15 @@
+{
+  "users": [
+    {
+      "email": "typetiger59@gmail.com",
+      "password": "$2a$10$BIYWf7ilAH5KY02z7uAPSek1MU7eOdKTWPBx7PJKUcp8QShIVZ9cm",
+      "firstName": "Azamat",
+      "lastName": "Xakimov",
+      "gender": "male",
+      "id": 1
+    }
+  ],
+  "order": [],
+  "category": [],
+  "products": []
+}
