@@ -15,6 +15,10 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useNavigate } from "react-router-dom";
+import { Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
 
 export const Header = () => {
 
@@ -40,8 +44,56 @@ export const Header = () => {
         setAnchorElUser(null);
     };
 
+    const [state, setState] = React.useState({
+        top: false,
+        left: false,
+        bottom: false,
+        right: false,
+    });
+    
+    const toggleDrawer = (anchor, open) => (event) => {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+    
+        setState({ ...state, [anchor]: open });
+    };
 
-
+    const list = (anchor) => (
+        <Box
+        sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+        role="presentation"
+        onClick={toggleDrawer(anchor, false)}
+        onKeyDown={toggleDrawer(anchor, false)}
+        >
+        <List>
+            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+            <ListItem key={text} disablePadding>
+                <ListItemButton>
+                <ListItemIcon>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+                </ListItemButton>
+            </ListItem>
+            ))}
+        </List>
+        <Divider />
+        <List>
+            {['All mail', 'Trash', 'Spam'].map((text, index) => (
+            <ListItem key={text} disablePadding>
+                <ListItemButton>
+                <ListItemIcon>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+                </ListItemButton>
+            </ListItem>
+            ))}
+        </List>
+        </Box>
+        );
+    
 
     return <>
         <AppBar position="static">
@@ -141,9 +193,20 @@ export const Header = () => {
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
-                        <IconButton sx={{marginRight: "20px"}} aria-label="order">
-                            <ShoppingCartIcon />
-                        </IconButton>                            
+                        {['left'].map((anchor) => (
+                            <React.Fragment key={anchor}>
+                            <IconButton sx={{marginRight: "20px"}} onClick={toggleDrawer(anchor, true)} aria-label="order">
+                                <ShoppingCartIcon />
+                            </IconButton>    
+                            <Drawer
+                                anchor={anchor}
+                                open={state[anchor]}
+                                onClose={toggleDrawer(anchor, false)}
+                            >
+                                {list(anchor)}
+                            </Drawer>
+                            </React.Fragment>
+                        ))}                        
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
