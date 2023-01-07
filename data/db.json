@@ -7,9 +7,54 @@
       "lastName": "Xakimov",
       "gender": "male",
       "id": 1
+    },
+    {
+      "email": "typetiger@gmail.com",
+      "password": "$2a$10$6uGX6oTPA0w9LC2aNThem.ieaZMZCAEW9OS24OTxrhc/x0Q1gam.G",
+      "firstName": "Azamat",
+      "lastName": "B",
+      "gender": "male",
+      "id": 2
     }
   ],
   "order": [],
-  "category": [],
-  "products": []
+  "category": [
+    {
+      "category_name": "Apple",
+      "id": 1
+    },
+    {
+      "category_name": "Samsung",
+      "id": 2
+    },
+    {
+      "category_name": "Xiaomi",
+      "id": 3
+    },
+    {
+      "category_name": "Asus",
+      "id": 4
+    },
+    {
+      "category_name": "BlackBerry",
+      "id": 5
+    },
+    {
+      "category_name": "Huawei",
+      "id": 6
+    },
+    {
+      "category_name": "Nokia",
+      "id": 7
+    }
+  ],
+  "products": [
+    {
+      "category_id": "2",
+      "product_price": 1354,
+      "product_title": "SAadafaf",
+      "product_img": "https://m.media-amazon.com/images/I/81vDZyJQ-4L._SL1500_.jpg",
+      "id": 1
+    }
+  ]
 }

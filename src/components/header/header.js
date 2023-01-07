@@ -15,11 +15,13 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useNavigate } from "react-router-dom";
-import { Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-
+import { Divider, Drawer, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Link as RouteLink } from "react-router-dom";
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { AuthContext } from "../../context/AuthContext";
+import { MeContext } from "../../context/MeContext";
+
 
 export const Header = () => {
 
@@ -92,9 +94,10 @@ export const Header = () => {
             ))}
         </List>
         </Box>
-        );
+    );
     
     const {token, setToken} = useContext(AuthContext)
+    const {me} = useContext(MeContext)
     return <>
         <AppBar position="static">
             <Container maxWidth="xl">
@@ -209,7 +212,7 @@ export const Header = () => {
                         ))}  
                         {token ? <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                <Avatar>{`${me.firstName[0]}${me.lastName[0]}`}</Avatar>
                             </IconButton>
                         </Tooltip> : <></>}                   
                         
@@ -229,6 +232,9 @@ export const Header = () => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                             >
+                                <MenuItem onClick={handleCloseUserMenu}>
+                                    <Button component={RouteLink} to="/admin">Admin</Button>
+                                </MenuItem>
                                 <MenuItem key={"LogOut"} onClick={handleCloseUserMenu}>
                                     <Button textAlign="center" component="button" onClick={() => {
                                         setToken("")
