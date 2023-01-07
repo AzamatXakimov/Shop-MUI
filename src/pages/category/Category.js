@@ -14,6 +14,7 @@ export const Category = () => {
     const [isChanged, setIsChanged] = useState(false);
     const CategoryInputRef = useRef();
     const [categorys, setCategorys] = useState([])
+    const [products, setProducts] = useState([])
 
     const hendelSubmit = (evt) => {
         evt.preventDefault()
@@ -49,19 +50,23 @@ export const Category = () => {
         }).catch(err => console.log(err))
     }, [isChanged])
     
-    const knowProduct = (id) => {
-        axios.get(`http://localhost:8080/products?category_id=${id}`).then(data => {
-            if(data.data.lendth > 0){
-                return true
+    useEffect(() => {
+        axios.get("http://localhost:8080/products").then(data => {
+            if(data.status === 200){
+                setProducts(data.data)
+                console.log(data);
             }
         }).catch(err => console.log(err))
-    }
+    }, []);
 
-    knowProduct(1)
+    const haveProduct = new Map();
+    
+    categorys.map(item => {
+        const isTrue = products.findIndex(element => Number(element.category_id) === item.id) > -1 ? true : false
+        haveProduct.set(item.id, isTrue);    
+    })
 
-    // const IsDisabled = {
-
-    // }
+    console.log(haveProduct.get(1));
 
     return <>
         <Box>
@@ -99,9 +104,8 @@ export const Category = () => {
                                             </IconButton>
                                             <IconButton 
                                             // disabled={knowProduct(item.id)} 
-                                            disabled={true} 
+                                            disabled={haveProduct.get(item.id)} 
                                             onClick = {() => {
-                                                knowProduct(item.id)
                                                 deleteCategory(item.id)
                                             }} color="error">
                                                 <DeleteForeverIcon />

@@ -55,6 +55,13 @@
       "product_title": "SAadafaf",
       "product_img": "https://m.media-amazon.com/images/I/81vDZyJQ-4L._SL1500_.jpg",
       "id": 1
+    },
+    {
+      "category_id": "1",
+      "product_price": 998,
+      "product_title": "Iphone 14 pro max",
+      "product_img": "https://www.apple.com/v/iphone-14-pro/c/images/meta/iphone-14-pro_overview__e414c54gtu6a_og.png",
+      "id": 2
     }
   ]
 }

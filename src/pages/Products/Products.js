@@ -51,7 +51,7 @@ export const Products = () => {
                 console.log(data);
             }
         }).catch(err => console.log(err))
-    }, [isChanged]);
+    }, []);
 
     const productPost = (data) => {
         axios.post("http://localhost:8080/products", data).then(res => res.status === 201 ? (
