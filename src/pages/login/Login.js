@@ -43,7 +43,7 @@ export const Login = () => {
     }
     return <>
         <Paper sx={{width: "50%", marginX: "auto", marginTop: 15, padding: "32px", borderRadius: "10px"}}>
-            <Typography sx={{textAlign: "center"}} variant='h3' component="h2" gutterBottom>
+            <Typography textAlign="center" variant='h3' component="h2" gutterBottom>
                 Login
             </Typography>
 

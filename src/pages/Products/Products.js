@@ -64,8 +64,8 @@ export const Products = () => {
 
 
     function TabPanel({children, value, index, ...other}) {
-        // console.log(value, index);
-        // console.log(value !== index);
+        console.log(value, index);
+        console.log(value !== index);
         return (
             <div
                 role="tabpanel"

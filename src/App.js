@@ -15,7 +15,7 @@ export const App = () => {
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
             <Routes>
-                <Route path="/" element={<Main />}/>
+                <Route path="/*" element={<Main />}/>
                 <Route path="/admin/*" element={<Admin />}/>
             </Routes>
         </ThemeProvider>

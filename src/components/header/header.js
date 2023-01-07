@@ -236,7 +236,7 @@ export const Header = () => {
                                     <Button component={RouteLink} to="/admin">Admin</Button>
                                 </MenuItem>
                                 <MenuItem key={"LogOut"} onClick={handleCloseUserMenu}>
-                                    <Button textAlign="center" component="button" onClick={() => {
+                                    <Button  component="button" onClick={() => {
                                         setToken("")
                                     }}>Log Out</Button>
                                 </MenuItem>
