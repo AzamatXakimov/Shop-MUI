@@ -2,6 +2,7 @@ import { Box, Link, List, ListItem, ListItemButton, Typography } from '@mui/mate
 import React from 'react'
 import { Link as RouteLink, Route, Routes} from "react-router-dom"
 import { Category } from "../category/Category"
+import { Orders } from '../Orders/Orders'
 import { Products } from '../Products/Products'
 export const Admin = () => {
     return<>
@@ -50,7 +51,7 @@ export const Admin = () => {
                     <Routes>
                         <Route index element={<Category/>}/>
                         <Route path='products' element={<Products/>}/>
-                        {/* <Route path='orders' element={</>}/> */}
+                        <Route path='orders' element={<Orders/>}/>
                     </Routes>
                 </Box>
             </Box>

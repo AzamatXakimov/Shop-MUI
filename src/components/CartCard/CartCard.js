@@ -28,3 +28,16 @@ export const CartCard = ({obj}) => {
         </ListItem>
     </>
 }
+export const OrderCartCard = ({obj}) => {
+    return <>
+        <ListItem sx={{display: "block"}}>
+            <Box sx={{display: "flex", alignItems: "center", marginBottom: "10px"}}>
+                <ListItemAvatar>
+                    <Avatar></Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={obj.product_title} secondary={`Price: ${obj.price}`} />
+            </Box>
+            <Divider variant="inset" sx={{marginLeft: "0", marginTop: "10px"}}/>
+        </ListItem>
+    </>
+}

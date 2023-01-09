@@ -72,7 +72,6 @@ export const Header = () => {
         <Box
         sx={{ width: "400px", height: "100vh", paddingX: "20px", paddingBottom: "50px", display: "flex", flexDirection: "column", justifyContent: "space-between"}}
         role="presentation"
-        onClick={toggleDrawer(anchor, false)}
         onKeyDown={toggleDrawer(anchor, false)}
         >
             <Box>
