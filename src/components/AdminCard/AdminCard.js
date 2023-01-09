@@ -1,12 +1,6 @@
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from "@mui/material"
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { useCart } from "react-use-cart"
-import { useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
 
-export const CardProduct =({obj}) => {
-    const { addItem } = useCart();
-    const {token} = useContext(AuthContext)
+export const AdminCard =({obj, deleteFn, setEditModal, setEditModalId}) => {
     return <>
         <Card sx={{ maxWidth: 345 }}>
             <CardActionArea>
@@ -28,13 +22,15 @@ export const CardProduct =({obj}) => {
             </CardActionArea>
             <CardActions>
                 <Button onClick={() => {
-                    if(token){
-                        addItem(obj)
-                    }
-                }} variant="contained" endIcon={
-                    <AddShoppingCartIcon />
-                } color="primary">
-                    Buy
+                    deleteFn(obj.id)
+                }} variant="contained" color="error">
+                    Delete
+                </Button>
+                <Button onClick={() => {
+                    setEditModal(true)
+                    setEditModalId(obj.id)
+                }} variant="contained" color="warning">
+                    Edit
                 </Button>
             </CardActions>
         </Card>

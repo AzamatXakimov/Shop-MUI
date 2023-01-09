@@ -15,21 +15,28 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useNavigate } from "react-router-dom";
-import { Divider, Drawer, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Badge, Divider, Drawer, List, Stack } from "@mui/material";
+import {Modal} from "../../components/Modal/Modal"
 import { Link as RouteLink } from "react-router-dom";
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import { AuthContext } from "../../context/AuthContext";
 import { MeContext } from "../../context/MeContext";
-
+import { CartCard } from "../CartCard/CartCard";
+import { useCart } from "react-use-cart"
+import axios from 'axios';
 
 export const Header = () => {
 
     const navigate = useNavigate()
     const pages = ['Products', 'Pricing', 'Blog'];
+    const { totalItems, items, cartTotal, emptyCart } = useCart()
 
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [orderModalPost, setOrderModalPost] = React.useState(false);
+
+        
+    const {token, setToken} = useContext(AuthContext)
+    const {me} = useContext(MeContext);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -63,41 +70,47 @@ export const Header = () => {
 
     const list = (anchor) => (
         <Box
-        sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+        sx={{ width: "400px", height: "100vh", paddingX: "20px", paddingBottom: "50px", display: "flex", flexDirection: "column", justifyContent: "space-between"}}
         role="presentation"
         onClick={toggleDrawer(anchor, false)}
         onKeyDown={toggleDrawer(anchor, false)}
         >
-        <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-                <ListItemButton>
-                <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-                </ListItemButton>
-            </ListItem>
-            ))}
-        </List>
-        <Divider />
-        <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-                <ListItemButton>
-                <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-                </ListItemButton>
-            </ListItem>
-            ))}
-        </List>
+            <Box>
+                <Typography my={"25px"} variant="h4" component="h2">Orders</Typography>
+                <Divider />
+                
+                {totalItems < 1 ? <Typography variant="h5" component="h3">Empty</Typography> : (
+                    <List sx={{height: "100%", overflowY: "scroll"}}>
+                        {items.map(element => <CartCard obj={element} />)}
+                    </List>
+                )}
+            </Box>
+            <Stack direction="row" alignItems="center" spacing={2}>
+                <Button variant="contained" color="error" onClick={() => {
+                    emptyCart()
+                }}>Clear cart</Button>
+                <Button variant="contained" color="success" onClick={() => {
+                    setOrderModalPost(true)
+                }}>Order</Button>
+                <Typography variant="body2">Total: {cartTotal} $</Typography>
+            </Stack>
         </Box>
     );
-    
-    const {token, setToken} = useContext(AuthContext)
-    const {me} = useContext(MeContext)
+
+    const handelOrdersPost = () => {
+        axios.post("http://localhost:8080/order", {
+            user_name: me.firstName,
+            user_lastName: me.lastName,
+            user_email: me.email,
+            user_orders: items,
+            total: cartTotal,
+            user_id: me.id,
+        }).then(res => res.status === 201 ? (
+            setOrderModalPost(false),
+            console.log(res)
+        ) : "").catch(err => console.log(err))
+    }
+
     return <>
         <AppBar position="static">
             <Container maxWidth="xl">
@@ -198,9 +211,12 @@ export const Header = () => {
                     <Box sx={{ flexGrow: 0 }}>
                         {['left'].map((anchor) => (
                             <React.Fragment key={anchor}>
-                            <IconButton sx={{marginRight: "20px"}} onClick={toggleDrawer(anchor, true)} aria-label="order">
-                                <ShoppingCartIcon />
-                            </IconButton>    
+                            <Badge badgeContent={totalItems} color="error">
+                            {/* <MailIcon color="action" /> */}
+                                <IconButton onClick={toggleDrawer(anchor, true)} aria-label="order">
+                                    <ShoppingCartIcon />
+                                </IconButton>    
+                            </Badge>
                             <Drawer
                                 anchor={anchor}
                                 open={state[anchor]}
@@ -210,11 +226,13 @@ export const Header = () => {
                             </Drawer>
                             </React.Fragment>
                         ))}  
-                        {token ? <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar>{`${me.firstName[0]}${me.lastName[0]}`}</Avatar>
-                            </IconButton>
-                        </Tooltip> : <></>}                   
+                        <Box sx={{marginLeft: "20px", display: "inline"}}>
+                            {token ? <Tooltip  title="Open settings">
+                                <IconButton  onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <Avatar>{`${me.firstName[0]}${me.lastName[0]}`}</Avatar>
+                                </IconButton>
+                            </Tooltip> : <></>}                   
+                        </Box>
                         
                         <Menu
                             sx={{ mt: '45px' }}
@@ -249,5 +267,16 @@ export const Header = () => {
                 </Toolbar>
             </Container>
         </AppBar>
+
+        <Modal modal={orderModalPost} setModal={setOrderModalPost} title="Are you sure?">
+            <Stack direction="row" spacing={3} sx={{padding: "20px"}}>
+                <Button variant="contained" color="error" onClick={() => {
+                    setOrderModalPost(false)
+                }}>NO</Button>
+                <Button variant="contained" color="success" onClick={() => {
+                    handelOrdersPost()
+                }}>YES</Button>
+            </Stack>
+        </Modal>
     </>
 }

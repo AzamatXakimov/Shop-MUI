@@ -59,14 +59,14 @@ export const Category = () => {
         }).catch(err => console.log(err))
     }, []);
 
+
+
     const haveProduct = new Map();
-    
     categorys.map(item => {
         const isTrue = products.findIndex(element => Number(element.category_id) === item.id) > -1 ? true : false
         haveProduct.set(item.id, isTrue);    
     })
 
-    console.log(haveProduct.get(1));
 
     return <>
         <Box>

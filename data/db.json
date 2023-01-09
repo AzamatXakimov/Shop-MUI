@@ -17,7 +17,36 @@
       "id": 2
     }
   ],
-  "order": [],
+  "order": [
+    {
+      "user_name": "Azamat",
+      "user_lastName": "B",
+      "user_email": "typetiger@gmail.com",
+      "user_orders": [
+        {
+          "category_id": "3",
+          "price": 500,
+          "product_title": "MI 12",
+          "product_img": "https://assets.asaxiy.uz/product/items/desktop/1afa34a7f984eeabdbb0a7d494132ee52022080816180244179lwShWMtw0K.png.webp",
+          "id": 3,
+          "quantity": 1,
+          "itemTotal": 500
+        },
+        {
+          "category_id": "1",
+          "price": 998,
+          "product_title": "Iphone 14 pro max",
+          "product_img": "https://www.apple.com/v/iphone-14-pro/c/images/meta/iphone-14-pro_overview__e414c54gtu6a_og.png",
+          "id": 2,
+          "quantity": 1,
+          "itemTotal": 998
+        }
+      ],
+      "total": 1498,
+      "user_id": 2,
+      "id": 1
+    }
+  ],
   "category": [
     {
       "category_name": "Apple",
@@ -51,17 +80,24 @@
   "products": [
     {
       "category_id": "2",
-      "product_price": 1354,
+      "price": 1354,
       "product_title": "SAadafaf",
       "product_img": "https://m.media-amazon.com/images/I/81vDZyJQ-4L._SL1500_.jpg",
       "id": 1
     },
     {
       "category_id": "1",
-      "product_price": 998,
+      "price": 998,
       "product_title": "Iphone 14 pro max",
       "product_img": "https://www.apple.com/v/iphone-14-pro/c/images/meta/iphone-14-pro_overview__e414c54gtu6a_og.png",
       "id": 2
+    },
+    {
+      "category_id": "3",
+      "price": 500,
+      "product_title": "MI 12",
+      "product_img": "https://assets.asaxiy.uz/product/items/desktop/1afa34a7f984eeabdbb0a7d494132ee52022080816180244179lwShWMtw0K.png.webp",
+      "id": 3
     }
   ]
 }

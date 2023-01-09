@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { Button, CardActionArea, CardActions, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import Container from '@mui/material/Container';
 import axios from 'axios';
 import { CardProduct } from '../../components/Card/Card';

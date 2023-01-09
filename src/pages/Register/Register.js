@@ -50,7 +50,7 @@ export const Register = () => {
 
     return <>
         <Paper sx={{width: "50%", marginX: "auto", marginTop: 15, padding: "32px", borderRadius: "10px"}}>
-            <Typography textAlign="center" variant='h3' component="h2" gutterBottom>
+            <Typography sx={{textAlign: "center"}} variant='h3' component="h2" gutterBottom>
                 Registration
             </Typography>
 

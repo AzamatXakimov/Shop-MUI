@@ -7,7 +7,7 @@ import { Modal } from '../../components/Modal/Modal';
 import * as Yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { CardProduct } from '../../components/Card/Card';
+import { AdminCard } from '../../components/AdminCard/AdminCard';
 
 
 export const Products = () => {
@@ -16,13 +16,15 @@ export const Products = () => {
     const [categorys, setCategorys] = useState([]);
     const [products, setProducts] = useState([]);
     const [productModal, setProductModal] = useState(false);
+    const [productModalEdit, setProductModalEdit] = useState(false);
     const [isChanged, setIsChanged] = useState(false);
+    const [editModalId, setEditModalId] = useState(-1);
 
 
     const schema = Yup.object({
         product_img: Yup.string().url("Invalid Format").required("Required"),
         product_title: Yup.string().required("Required"),
-        product_price: Yup.number().required("Required"),
+        price: Yup.number().required("Required"),
         category_id: Yup.string().required("Required"),
     });
 
@@ -31,7 +33,7 @@ export const Products = () => {
         defaultValues: {
             product_img: "",
             product_title: "",
-            product_price: "",
+            price: "",
             category_id: "",
         },
         resolver: yupResolver(schema)
@@ -49,9 +51,10 @@ export const Products = () => {
             if(data.status === 200){
                 setProducts(data.data)
                 console.log(data);
+                setIsChanged(false);
             }
         }).catch(err => console.log(err))
-    }, []);
+    }, [isChanged]);
 
     const productPost = (data) => {
         axios.post("http://localhost:8080/products", data).then(res => res.status === 201 ? (
@@ -61,11 +64,17 @@ export const Products = () => {
         ) : "").catch(err => console.log(err))
     };
 
+    const productEdit = (data) => {
+        axios.put(`http://localhost:8080/products/${editModalId}`, data).then(res => {
+            setProductModalEdit(false);
+            setIsChanged(true);
+            setEditModalId(-1);
+            console.log(res)
+        }).catch(err => console.log(err))
+    }
 
 
     function TabPanel({children, value, index, ...other}) {
-        console.log(value, index);
-        console.log(value !== index);
         return (
             <div
                 role="tabpanel"
@@ -92,6 +101,13 @@ export const Products = () => {
         setValue(Number(event.target.attributes.tabindex.nodeValue));
         // console.log(newValue);
     };
+
+
+    const hendelDeleteProduct = (id) => {
+        axios.delete(`http://localhost:8080/products/${id}`).then(data => {
+            setIsChanged(true);
+        }).catch(err => console.log(err))
+    }
     return<>
         <Button type='button' onClick={() => {
             setProductModal(true)
@@ -112,9 +128,9 @@ export const Products = () => {
                     <Grid container spacing={2}>
                         {products.map(item => {
                             if(value === Number(item.category_id)){
-                                    return <Grid item xs={3}>
-                                        <CardProduct obj={item}/>
-                                    </Grid>
+                                return <Grid item xs={3}>
+                                    <AdminCard obj={item} deleteFn={hendelDeleteProduct} setEditModal={setProductModalEdit} setEditModalId={setEditModalId}/>
+                                </Grid>
                             }
                         })}
                     </Grid>
@@ -126,7 +142,7 @@ export const Products = () => {
                 <DialogContent dividers>
                     <TextField sx={{width: "100%", marginBottom: "20px"}} type="url" label="Image Url" helperText={errors.product_img?.message} {...register("product_img")}/>
                     <TextField sx={{width: "100%", marginBottom: "20px"}} type="text" label="Product Name" helperText={errors.product_title?.message} {...register("product_title")}/>
-                    <TextField sx={{width: "100%", marginBottom: "20px"}} type="number"label="Product Price" helperText={errors.product_price?.message} {...register("product_price")}/>
+                    <TextField sx={{width: "100%", marginBottom: "20px"}} type="number"label="Product Price" helperText={errors.price?.message} {...register("price")}/>
                     <TextField
                         sx={{width: "100%"}}
                         select
@@ -139,6 +155,28 @@ export const Products = () => {
                 </DialogContent>
                 <DialogActions>                    
                     <Button type="submit" variant='contained' color="success">Add</Button>
+                </DialogActions>
+            </form>
+        </Modal>
+        
+        <Modal modal={productModalEdit} setModal={setProductModalEdit} title="Edit Product">
+            <form onSubmit={handleSubmit(productEdit)}>
+                <DialogContent dividers>
+                    <TextField sx={{width: "100%", marginBottom: "20px"}} type="url" label="Image Url" helperText={errors.product_img?.message} {...register("product_img")}/>
+                    <TextField sx={{width: "100%", marginBottom: "20px"}} type="text" label="Product Name" helperText={errors.product_title?.message} {...register("product_title")}/>
+                    <TextField sx={{width: "100%", marginBottom: "20px"}} type="number"label="Product Price" helperText={errors.price?.message} {...register("price")}/>
+                    <TextField
+                        sx={{width: "100%"}}
+                        select
+                        helperText={errors.category_id?.message}
+                        label="Category"
+                        {...register('category_id')}
+                    >
+                        {categorys.map(item => <MenuItem value={item.id}>{item.category_name}</MenuItem>)}
+                    </TextField>
+                </DialogContent>
+                <DialogActions>                    
+                    <Button type="submit" variant='contained' color="warning">Edit</Button>
                 </DialogActions>
             </form>
         </Modal>
